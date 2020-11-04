@@ -6,9 +6,9 @@ from matplotlib.animation import FuncAnimation
 import sys
 
 def run_game(states, ax, t):
-    max_game_time = 50
+    max_game_time = 100
     ax.clear()
-    ax.set_title(str(t) + " time steps")
+    # ax.set_title(str(t) + " time steps")
     grid = np.ones(states.grid_size)
     grid[states.bank_position] = 0
     colormap = matplotlib_colormap.get_cmap('RdBu')
@@ -106,7 +106,6 @@ if __name__ == '__main__':
         state = time_step(states=states, state=state, robber_rewards=robber_rewards, police_rewards=police_rewards)
 
         if t in [100000, 200000, 500000, 1000000]:
-            # input("whaat")
             print(t)
             fig, ax = plt.subplots()
             fig.set_tight_layout(True)

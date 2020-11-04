@@ -14,5 +14,16 @@ Rules:
 - The robber acts according to an epsilon-greedy policy with epsilon = 0.3, i.e. quite likely to try out "new" actions.
 - The police acts according to an epsilon-greedy policy with epsilon = 0.05, i.e. will mostly use existing knowledge.
 
+## Learned policies
 
+### after 100000 time steps
+![](game-100000.gif)
+
+### after 200000 time steps
 ![](game-200000.gif)
+
+### after 500000 time steps
+![](game-500000.gif)
+
+### after 1000000 time steps
+![](game-1000000.gif)
