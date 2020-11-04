@@ -37,7 +37,7 @@ def run_game(states, ax, t):
         police_mark.set_data(p1, p2)
         save_game.append(dict(robber=(r1, r2), police=(p1, p2)))
 
-        # plt.pause(0.2)  # pause and update (draw) positions
+        plt.pause(0.2)  # pause and update (draw) positions
 
     return save_game, robber_mark, police_mark, max_game_time
 
@@ -113,6 +113,6 @@ if __name__ == '__main__':
 
             # FuncAnimation will call the 'update' function for each frame; here
             # animating over 10 frames, with an interval of 200ms between frames.
-            anim = FuncAnimation(fig, update, frames=max_game_time, interval=300)
+            # anim = FuncAnimation(fig, update, frames=max_game_time, interval=300)
 
-            anim.save('game-' + str(t) + '.gif', dpi=100)
+            # anim.save('game-' + str(t) + '.gif', dpi=100)
