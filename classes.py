@@ -4,7 +4,6 @@ import copy
 from numpy.random import choice
 
 
-
 class StateSpace:
     def __init__(self, grid_size, r, p, b, r_epsilon, p_epsilon):
         self.grid_size = grid_size
@@ -110,7 +109,7 @@ class StateSpace:
 class RobberReward:
     def __init__(self):
         self.robbing_bank = 1
-        self.being_caught = -1
+        self.being_caught = -2
 
     def __call__(self, state):
         if state.robber_caught():
@@ -123,8 +122,8 @@ class RobberReward:
 
 class PoliceReward:
     def __init__(self):
-        self.bank_robbed = 0
-        self.catching_robber = 1
+        self.bank_robbed = -1
+        self.catching_robber = 2
 
     def __call__(self, state):
         if state.robber_robbing():

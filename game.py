@@ -99,13 +99,13 @@ if __name__ == '__main__':
     police_rewards = PoliceReward()
 
     state = states.initial_state
-    n = 1000001
+    n = 1000003
 
     for t in range(n):
         # compute next step
         state = time_step(states=states, state=state, robber_rewards=robber_rewards, police_rewards=police_rewards)
 
-        if t in [100000, 200000, 400000, 600000, 800000, 1000000]:
+        if t in [100000, 200000, 500000, 1000000]:
             # input("whaat")
             print(t)
             fig, ax = plt.subplots()
@@ -114,6 +114,6 @@ if __name__ == '__main__':
 
             # FuncAnimation will call the 'update' function for each frame; here
             # animating over 10 frames, with an interval of 200ms between frames.
-            anim = FuncAnimation(fig, update, frames=max_game_time, interval=200)
+            anim = FuncAnimation(fig, update, frames=max_game_time, interval=300)
 
             anim.save('game-' + str(t) + '.gif', dpi=100)
