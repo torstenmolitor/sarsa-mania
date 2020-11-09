@@ -5,6 +5,7 @@ import matplotlib.cm as matplotlib_colormap
 from matplotlib.animation import FuncAnimation
 import sys
 
+
 def run_game(states, ax, t):
     max_game_time = 100
     ax.clear()
@@ -30,6 +31,78 @@ def run_game(states, ax, t):
         i += 1
         state = states.state_where(robber=state.robber.neighbours[state.robber.select_action()],
                                    police=state.police.neighbours[state.police.select_action()])
+
+        (r2, r1) = state.robber.position
+        (p2, p1) = state.police.position
+        robber_mark.set_data(r1, r2)
+        police_mark.set_data(p1, p2)
+        save_game.append(dict(robber=(r1, r2), police=(p1, p2)))
+
+        plt.pause(0.2)  # pause and update (draw) positions
+
+    return save_game, robber_mark, police_mark, max_game_time
+
+
+
+def run_game_scores(states, t):
+    fig, ax = plt.subplots(2, 1)
+    fig.set_tight_layout(True)
+
+    max_game_time = 100
+    # ax[0].clear()
+    # ax.set_title(str(t) + " time steps")
+    grid = np.ones(states.grid_size)
+    grid[states.bank_position] = 0
+    colormap = matplotlib_colormap.get_cmap('RdBu')
+    ax[0].matshow(grid, cmap=colormap)
+    ax[0].set_yticklabels([])
+    ax[0].set_xticklabels([])
+    state = states.initial_state
+
+    ##
+    time_line = np.arange(max_game_time+1)
+    robber_score = robber_rewards(state=state)
+    police_score = police_rewards(state=state)
+    robber_score_all = np.full(shape=max_game_time+1, fill_value=np.nan)
+    police_score_all = np.full(shape=max_game_time+1, fill_value=np.nan)
+    robber_score_all[0] = robber_score
+    police_score_all[0] = police_score
+    robber_score_plot, = ax[1].plot(time_line, robber_score_all, '-', color=colormap(0.15))
+    police_score_plot, = ax[1].plot(time_line, police_score_all, '-', color=colormap(0.85))
+    ax[1].set_xlim(xmin=0, xmax=max_game_time)
+    ax[1].set_ylim(ymin=-10, ymax=10)
+    ##
+
+    (r2, r1) = state.robber.position
+    (p2, p1) = state.police.position
+
+    ##
+    robber_mark, = ax[0].plot(r1, r2, color=colormap(0.15), marker='$R$', markersize=16)  # create mark for robber
+    police_mark, = ax[0].plot(p1, p2, color=colormap(0.85), marker='$P$', markersize=16)  # create mark for police
+    ##
+
+    # robber_mark, = ax.plot(r1, r2, color=colormap(0.15), marker='$R$', markersize=16)     # create mark for robber
+    # police_mark, = ax.plot(p1, p2, color=colormap(0.85), marker='$P$', markersize=16)     # create mark for police
+    plt.pause(0.5)                          # pause and draw
+    i = 0
+
+    save_game = []
+    save_game.append(dict(robber=(r1, r2), police=(p1, p2)))
+
+    while i < max_game_time:
+        i += 1
+        state = states.state_where(robber=state.robber.neighbours[state.robber.select_action()],
+                                   police=state.police.neighbours[state.police.select_action()])
+
+        ##
+        # robber_score += robber_rewards(state=state)
+        # police_score += police_rewards(state=state)
+        robber_score_all[i] = robber_score_all[i-1] + robber_rewards(state=state)
+        print(robber_score_all)
+        police_score_all[i] = police_score_all[i-1] + police_rewards(state=state)
+        robber_score_plot.set_data(time_line, robber_score_all)
+        police_score_plot.set_data(time_line, police_score_all)
+        ##
 
         (r2, r1) = state.robber.position
         (p2, p1) = state.police.position
@@ -106,9 +179,11 @@ if __name__ == '__main__':
         state = time_step(states=states, state=state, robber_rewards=robber_rewards, police_rewards=police_rewards)
 
         if t in [100000, 200000, 500000, 1000000]:
-            print(t)
             fig, ax = plt.subplots()
             fig.set_tight_layout(True)
+
+            print(t)
+
             replay, robber_mark, police_mark, max_game_time = run_game(states=states, ax=ax, t=t)
 
             # FuncAnimation will call the 'update' function for each frame; here

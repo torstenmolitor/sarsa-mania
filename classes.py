@@ -108,8 +108,8 @@ class StateSpace:
 
 class RobberReward:
     def __init__(self):
-        self.robbing_bank = 1
-        self.being_caught = -2
+        self.robbing_bank = 2
+        self.being_caught = -1
 
     def __call__(self, state):
         if state.robber_caught():
@@ -122,8 +122,8 @@ class RobberReward:
 
 class PoliceReward:
     def __init__(self):
-        self.bank_robbed = -1
-        self.catching_robber = 2
+        self.bank_robbed = -2
+        self.catching_robber = 3
 
     def __call__(self, state):
         if state.robber_robbing():
